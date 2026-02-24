@@ -46,7 +46,7 @@ use std::ptr::copy_nonoverlapping;
 
 use virtio_queue::DescriptorChain;
 use vm_memory::bitmap::{BitmapSlice, MS};
-use vm_memory::{Address, ByteValued, GuestMemory, GuestMemoryRegion, MemoryRegionAddress};
+use vm_memory::{Address, ByteValued, GuestMemoryBackend, GuestMemoryRegion, MemoryRegionAddress};
 
 use super::{Error, FileReadWriteVolatile, FileVolatileSlice, IoBuffers, Reader, Result, Writer};
 
@@ -68,7 +68,7 @@ impl<'a> Reader<'a> {
     ) -> Result<Reader<'a, MS<'a, M::Target>>>
     where
         M: Deref,
-        M::Target: GuestMemory + Sized,
+        M::Target: GuestMemoryBackend + Sized,
     {
         let mut total_len: usize = 0;
         // Allocate VecDeque with 64 capacity and hope it could hold all slices to avoid expending
@@ -126,7 +126,7 @@ impl<'a> VirtioFsWriter<'a> {
     ) -> Result<VirtioFsWriter<'a, MS<'a, M::Target>>>
     where
         M: Deref,
-        M::Target: GuestMemory + Sized,
+        M::Target: GuestMemoryBackend + Sized,
     {
         let mut total_len: usize = 0;
         // Allocate VecDeque with 64 capacity and hope it could hold all slices to avoid expending
